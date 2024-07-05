@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Peso de Gados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            margin: 5px;
+        }
+    </style>
+</head>
+    
+<body>
+    <h1>Calculadora de Peso de Gados com auxilio do chat para desenvolver o codigo para a minha logica</h1>
+    <p>Digite os pesos dos gados (0 para terminar):</p>
+    <input type="number" id="peso-input" placeholder="Digite o peso do gado">
+    <button onclick="adicionarPeso()">Adicionar Peso</button>
+
+    <h2>Pesos Inseridos</h2>
+    <ul id="lista-pesos"></ul> <!-- Lista vazia para mostrar os pesos inseridos -->
+
+    <h2>Resultados</h2>
+    <p id="quantidade">Quantidade de gados: 0</p>
+    <p id="menor">Peso do menor gado: N/A</p>
+    <p id="maior">Peso do maior gado: N/A</p>
+    <p id="media">Média do peso dos gados: N/A</p>
+
+    <script>
+        // Variáveis para armazenar os pesos dos gados e a quantidade de gados
+        let pesos = [];
+        let quantidade = 0;
+
+        // Função para adicionar um novo peso à lista
+        function adicionarPeso() {
+            let pesoInput = document.getElementById("peso-input"); // Captura o elemento de input
+            let peso = parseFloat(pesoInput.value); // Converte o valor do input para número
+
+            // Verifica se o peso inserido é 0 para calcular os resultados
+            if (peso === 0) {
+                calcularResultados();
+                return;
+            }
+
+            // Verifica se o peso inserido é válido (maior que 0)
+            if (peso > 0) {
+                pesos.push(peso); // Adiciona o peso à lista
+                quantidade++; // Incrementa a quantidade de gados
+                atualizarListaPesos(); // Atualiza a exibição dos pesos na lista
+                pesoInput.value = "";  // Limpa o campo de entrada
+                pesoInput.focus();  // Foca novamente no campo de entrada
+            } else {
+                alert("Por favor, insira um peso válido."); // Alerta se o peso não for válido
+            }
+        }
+
+        // Função para atualizar a lista de pesos inseridos na interface
+        function atualizarListaPesos() {
+            let lista = document.getElementById("lista-pesos"); // Captura o elemento da lista
+            lista.innerHTML = "";  // Limpa a lista
+
+            // Para cada peso na lista de pesos, cria um item de lista e adiciona à interface
+            pesos.forEach((peso, index) => {
+                let item = document.createElement("li"); // Cria um elemento de lista
+                item.textContent = `Gado ${index + 1}: ${peso} kg`; // Define o texto do item
+                lista.appendChild(item); // Adiciona o item à lista
+            });
+        }
+
+        // Função para calcular e exibir os resultados finais
+        function calcularResultados() {
+            let menorPesoTemp = Infinity; // Variável para armazenar o menor peso inicializada com Infinity
+            let maiorPesoTemp = -Infinity; // Variável para armazenar o maior peso inicializada com -Infinity
+            let somaPesosTemp = 0; // Variável para armazenar a soma dos pesos inicializada com 0
+
+            // Itera sobre cada peso na lista de pesos
+            pesos.forEach(peso => {
+                if (peso < menorPesoTemp) { // Verifica se o peso atual é menor que o menor peso temporário
+                    menorPesoTemp = peso; // Atualiza o menor peso temporário
+                }
+                if (peso > maiorPesoTemp) { // Verifica se o peso atual é maior que o maior peso temporário
+                    maiorPesoTemp = peso; // Atualiza o maior peso temporário
+                }
+                somaPesosTemp += peso; // Soma o peso atual à soma total dos pesos temporária
+            });
+
+            // Calcula a média dos pesos
+            let mediaPesosTemp = somaPesosTemp / pesos.length;
+
+            // Verifica se há pelo menos um peso na lista para exibir os resultados
+            if (pesos.length > 0) {
+                // Atualiza os elementos HTML com os resultados calculados
+                document.getElementById("quantidade").textContent = "Quantidade de gados: " + quantidade;
+                document.getElementById("menor").textContent = "Peso do menor gado: " + menorPesoTemp;
+                document.getElementById("maior").textContent = "Peso do maior gado: " + maiorPesoTemp;
+                document.getElementById("media").textContent = "Média do peso dos gados: " + mediaPesosTemp.toFixed(2);
+            } else {
+                // Se não houver pesos na lista, exibe mensagens padrão
+                document.getElementById("quantidade").textContent = "Quantidade de gados: 0";
+                document.getElementById("menor").textContent = "Peso do menor gado: N/A";
+                document.getElementById("maior").textContent = "Peso do maior gado: N/A";
+                document.getElementById("media").textContent = "Média do peso dos gados: N/A";
+            }
+        }
+    </script>
+</body>
+</html>
